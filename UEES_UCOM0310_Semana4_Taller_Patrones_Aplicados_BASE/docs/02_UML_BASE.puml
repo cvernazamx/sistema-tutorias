@@ -1,0 +1,29 @@
+@startuml
+title Semana 4 - Diseño BASE antes de aplicar patrones
+
+class Reserva
+class ReservaService
+class BancoAntiguo
+class InventarioService
+class ReservaRepository
+class CorreoService
+class AuditoriaService
+class AnaliticaService
+
+ReservaService --> BancoAntiguo
+ReservaService --> InventarioService
+ReservaService --> ReservaRepository
+ReservaService --> CorreoService
+ReservaService --> AuditoriaService
+ReservaService --> AnaliticaService
+
+ReservaService --> Reserva
+
+note right of ReservaService
+  Detectar:
+  - interfaz externa
+  - coordinación
+  - política variable
+  - receptores variables
+end note
+@enduml
