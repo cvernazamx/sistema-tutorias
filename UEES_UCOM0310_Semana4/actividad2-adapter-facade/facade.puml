@@ -1,0 +1,12 @@
+@startuml
+class TutoriasFacade
+class ServicioReservas
+class ServicioCalendario
+interface Notificador
+interface Videoconferencia
+
+TutoriasFacade --> ServicioReservas
+TutoriasFacade --> ServicioCalendario
+TutoriasFacade --> Notificador
+TutoriasFacade --> Videoconferencia
+@enduml

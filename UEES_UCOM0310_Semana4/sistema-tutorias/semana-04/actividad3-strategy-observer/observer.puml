@@ -1,0 +1,38 @@
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+
+interface ReservaObserver <<Observer>> {
+  + actualizar(reserva: Reserva): void
+}
+
+class EmailObserver implements ReservaObserver {
+  + actualizar(reserva: Reserva): void
+}
+
+class CalendarioObserver implements ReservaObserver {
+  + actualizar(reserva: Reserva): void
+}
+
+class PanelEstudianteObserver implements ReservaObserver {
+  + actualizar(reserva: Reserva): void
+}
+
+class PanelDocenteObserver implements ReservaObserver {
+  + actualizar(reserva: Reserva): void
+}
+
+class Reserva <<Subject>> {
+  - id: String
+  - fechaHora: LocalDateTime
+  - estado: EstadoReserva
+  - observers: List<ReservaObserver>
+  + agregarObserver(observer: ReservaObserver): void
+  + eliminarObserver(observer: ReservaObserver): void
+  - notificar(): void
+  + confirmar(): void
+  + cancelar(): void
+}
+
+Reserva "1" o--> "0..*" ReservaObserver : notifica
+@enduml

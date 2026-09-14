@@ -1,0 +1,35 @@
+@startuml
+interface Notificador {
+    + enviar(destino: String, mensaje: String): void
+}
+
+class NotificadorEmail
+class NotificadorPush
+class NotificadorSms
+class NotificadorTeams
+
+Notificador <|.. NotificadorEmail
+Notificador <|.. NotificadorPush
+Notificador <|.. NotificadorSms
+Notificador <|.. NotificadorTeams
+
+abstract class NotificadorCreator {
+    # {abstract} crearNotificador(): Notificador
+    + notificar(destino: String, mensaje: String): void
+}
+
+class EmailCreator
+class PushCreator
+class SmsCreator
+class TeamsCreator
+
+NotificadorCreator <|-- EmailCreator
+NotificadorCreator <|-- PushCreator
+NotificadorCreator <|-- SmsCreator
+NotificadorCreator <|-- TeamsCreator
+
+EmailCreator ..> NotificadorEmail : crea
+PushCreator ..> NotificadorPush : crea
+SmsCreator ..> NotificadorSms : crea
+TeamsCreator ..> NotificadorTeams : crea
+@enduml

@@ -1,0 +1,33 @@
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+
+interface PoliticaCancelacion <<Strategy>> {
+  + puedeCancelar(reserva: Reserva): boolean
+}
+
+class CancelacionNormal implements PoliticaCancelacion {
+  + puedeCancelar(reserva: Reserva): boolean
+}
+
+class CancelacionPrioritaria implements PoliticaCancelacion {
+  + puedeCancelar(reserva: Reserva): boolean
+}
+
+class CancelacionGrupal implements PoliticaCancelacion {
+  + puedeCancelar(reserva: Reserva): boolean
+}
+
+class CancelacionEmergencia implements PoliticaCancelacion {
+  + puedeCancelar(reserva: Reserva): boolean
+}
+
+class ServicioCancelacion <<Context>> {
+  - politica: PoliticaCancelacion
+  + ServicioCancelacion(politica: PoliticaCancelacion)
+  + cambiarPolitica(politica: PoliticaCancelacion): void
+  + cancelar(reserva: Reserva): void
+}
+
+ServicioCancelacion o--> PoliticaCancelacion : delega
+@enduml
