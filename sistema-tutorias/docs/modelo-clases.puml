@@ -1,0 +1,87 @@
+@startuml
+skinparam classAttributeIconSize 0
+skinparam monochrome true
+skinparam shadowing false
+
+enum EstadoReserva {
+  PENDIENTE
+  CONFIRMADA
+  CANCELADA
+  REALIZADA
+}
+
+abstract class Usuario {
+  - id: Long
+  - nombre: String
+  - email: String
+  + getEmail(): String
+  + getNombreCompleto(): String
+}
+
+class Estudiante {
+  - matricula: String
+  - carrera: String
+  + solicitarTutoria(horario: HorarioTutoria, materia: Asignatura): Reserva
+  + consultarHistorial(): List<Reserva>
+}
+
+class Docente {
+  - departamento: String
+  - cubiculo: String
+  + publicarHorario(fecha: LocalDate, inicio: LocalTime, fin: LocalTime): HorarioTutoria
+  + evaluarSolicitud(reserva: Reserva, aceptar: boolean): void
+}
+
+class HorarioTutoria {
+  - id: Long
+  - fecha: LocalDate
+  - horaInicio: LocalTime
+  - horaFin: LocalTime
+  - disponible: boolean
+  + reservar(): void
+  + liberar(): void
+  + estaDisponible(): boolean
+}
+
+class Reserva {
+  - id: Long
+  - fechaCreacion: LocalDateTime
+  - estado: EstadoReserva
+  - motivo: String
+  + confirmar(): void
+  + cancelar(motivo: String): void
+  + reprogramar(nuevoHorario: HorarioTutoria): void
+}
+
+class Asignatura {
+  - codigo: String
+  - nombre: String
+}
+
+interface INotificador {
+  + enviar(destinatario: Usuario, mensaje: String): void
+}
+
+interface IReservaRepository {
+  + guardar(reserva: Reserva): void
+  + buscarPorId(id: Long): Reserva
+}
+
+class ServicioReservas {
+  + crearReserva(estudiante: Estudiante, horario: HorarioTutoria, materia: Asignatura): Reserva
+  + cancelarReserva(idReserva: Long, motivo: String): void
+}
+
+Usuario <|-- Estudiante
+Usuario <|-- Docente
+
+Docente "1" o-- "0..*" HorarioTutoria : oferta >
+Estudiante "1" -- "0..*" Reserva : solicita >
+Reserva "0..1" --> "1" HorarioTutoria : asignada a >
+Reserva "0..*" --> "1" Asignatura : corresponde a >
+Reserva --> EstadoReserva
+
+ServicioReservas ..> Reserva : gestiona
+ServicioReservas ..> INotificador : notifica a
+ServicioReservas ..> IReservaRepository : persiste mediante
+@enduml
