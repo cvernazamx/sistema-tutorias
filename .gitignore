@@ -1,10 +1,5 @@
-venv/
-*/venv/
-*.pyc
-__pycache__/
-*/__pycache__/
-.DS_Store
-*/.DS_Store
-.DS_Store
 **/target/
-.vscode/
+**/.DS_Store
+**/.idea/
+**/*.iml
+**/.vscode/
