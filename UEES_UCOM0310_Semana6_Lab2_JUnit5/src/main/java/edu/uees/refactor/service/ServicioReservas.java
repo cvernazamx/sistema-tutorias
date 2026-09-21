@@ -1,34 +1,22 @@
 package edu.uees.refactor.service;
 
-import edu.uees.refactor.domain.PeriodoReserva;
 import edu.uees.refactor.domain.Reserva;
 
 public class ServicioReservas {
 
-    private final NotificadorReserva notificador;
-
-    public ServicioReservas() {
-        this.notificador = new NotificadorReserva();
-    }
-
     public double procesar(Reserva r, int horasAnticipacion) {
-        // Guard Clause 1: Entrada nula
         if (r == null) {
             return 0;
         }
 
-        // Guard Clause 2: Validación de correo
         if (r.getCorreo() == null || !r.getCorreo().contains("@")) {
             return 0;
         }
 
-        // Guard Clause 3: Coherencia temporal mediante Value Object
-        PeriodoReserva periodo = new PeriodoReserva(r.getInicio(), r.getFin());
-        if (!periodo.esValido()) {
+        if (r.getInicio() == null || r.getFin() == null || !r.getFin().isAfter(r.getInicio())) {
             return 0;
         }
 
-        // Guard Clause 4: Anticipación mínima
         if (horasAnticipacion < 2) {
             return 0;
         }
@@ -36,7 +24,7 @@ public class ServicioReservas {
         double total = calcularTotal(r);
 
         guardar(r);
-        notificador.notificarConfirmacion(r);
+        notificar(r);
 
         r.confirmar();
 
@@ -53,5 +41,9 @@ public class ServicioReservas {
 
     private void guardar(Reserva r) {
         System.out.println("Guardando reserva " + r.getId());
+    }
+
+    private void notificar(Reserva r) {
+        System.out.println("Correo enviado a " + r.getCorreo());
     }
 }
