@@ -11,6 +11,14 @@ import edu.uees.refactor.domain.Reserva;
  */
 public class ServicioReservas {
 
+    private double calcularTotal(Reserva r) {
+    double total = 40;
+    if ("VIP".equals(r.getTipo())) {
+        return total * 0.85;
+    }
+    return total;
+}
+
     public double procesar(
             Reserva r,
             int horasAnticipacion) {
@@ -34,11 +42,7 @@ public class ServicioReservas {
             return 0;
         }
 
-        double total = 40;
-
-        if ("VIP".equals(r.getTipo())) {
-            total = total * 0.85;
-        }
+        double total = calcularTotal(r);
 
         System.out.println(
                 "Guardando reserva " + r.getId()
