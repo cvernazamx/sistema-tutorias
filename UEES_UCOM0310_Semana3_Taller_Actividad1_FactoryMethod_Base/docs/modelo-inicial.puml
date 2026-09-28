@@ -1,0 +1,35 @@
+@startuml
+title Semana 3 - Actividad 1 - Modelo inicial
+
+interface Notificador {
+    + enviar(destino: String, mensaje: String): void
+}
+
+class NotificadorEmail
+class NotificadorPush
+class NotificadorSMS
+
+class CreadorNotificadorSimple {
+    + crear(tipo: String): Notificador
+}
+
+class ServicioNotificacion {
+    + notificar(tipo: String, destino: String, mensaje: String): void
+}
+
+Notificador <|.. NotificadorEmail
+Notificador <|.. NotificadorPush
+Notificador <|.. NotificadorSMS
+
+CreadorNotificadorSimple ..> NotificadorEmail : crea
+CreadorNotificadorSimple ..> NotificadorPush : crea
+CreadorNotificadorSimple ..> NotificadorSMS : crea
+
+ServicioNotificacion --> CreadorNotificadorSimple
+ServicioNotificacion ..> Notificador : usa
+
+note right of CreadorNotificadorSimple
+  Punto de análisis:
+  conoce todos los tipos concretos.
+end note
+@enduml

@@ -1,0 +1,98 @@
+cat << 'EOF' > docs/uml-incremento1.puml
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+
+package "edu.uees.disenosoftware.domain" {
+  class Estudiante {
+    - nombre: String
+    - correo: String
+    + getNombre(): String
+    + getCorreo(): String
+  }
+
+  class Docente {
+    - nombre: String
+    - correo: String
+    + getNombre(): String
+    + getCorreo(): String
+  }
+
+  class Reserva {
+    - id: String
+    - estudiante: Estudiante
+    - docente: Docente
+    - tema: String
+    + getId(): String
+    + getEstudiante(): Estudiante
+    + getDocente(): Docente
+    + getTema(): String
+  }
+}
+
+package "edu.uees.disenosoftware.adapter" {
+  interface Videoconferencia <<Target>> {
+    + crearSala(titulo: String, correoDocente: String): String
+  }
+
+  class ProveedorZoom <<Adaptee>> {
+    + generarMeeting(topic: String, hostEmail: String): String
+  }
+
+  class ZoomAdapter <<Adapter>> implements Videoconferencia {
+    - zoom: ProveedorZoom
+    + ZoomAdapter(zoom: ProveedorZoom)
+    + crearSala(titulo: String, correoDocente: String): String
+  }
+
+  class MicrosoftTeamsAPI <<Adaptee>> {
+    + scheduleOnlineMeeting(subject: String, organizer: String): String
+  }
+
+  class TeamsAdapter <<Adapter>> implements Videoconferencia {
+    - teamsApi: MicrosoftTeamsAPI
+    + TeamsAdapter(teamsApi: MicrosoftTeamsAPI)
+    + crearSala(titulo: String, correoDocente: String): String
+  }
+}
+
+package "edu.uees.disenosoftware.facade" {
+  class ServicioReservas {
+    + guardar(reserva: Reserva): Reserva
+  }
+
+  class ServicioCalendario {
+    + registrar(reserva: Reserva, enlace: String): void
+  }
+
+  interface Notificador {
+    + enviar(destino: String, mensaje: String): void
+  }
+
+  class NotificadorConsola implements Notificador {
+    + enviar(destino: String, mensaje: String): void
+  }
+
+  class TutoriasFacade <<Facade>> {
+    - reservas: ServicioReservas
+    - video: Videoconferencia
+    - calendario: ServicioCalendario
+    - notificador: Notificador
+    + TutoriasFacade(reservas: ServicioReservas, video: Videoconferencia, calendario: ServicioCalendario, notificador: Notificador)
+    + crearTutoriaVirtual(reserva: Reserva): Reserva
+  }
+}
+
+' Relaciones estructurales
+Reserva --> Estudiante
+Reserva --> Docente
+
+ZoomAdapter o--> ProveedorZoom
+TeamsAdapter o--> MicrosoftTeamsAPI
+
+TutoriasFacade --> ServicioReservas
+TutoriasFacade --> Videoconferencia
+TutoriasFacade --> ServicioCalendario
+TutoriasFacade --> Notificador
+@enduml
+EOF

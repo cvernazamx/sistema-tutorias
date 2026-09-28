@@ -1,0 +1,61 @@
+@startuml
+enum Modalidad {
+    PRESENCIAL
+    VIRTUAL
+}
+enum Prioridad {
+    BAJA
+    MEDIA
+    ALTA
+}
+class Reserva {
+    - estudiante: String
+    - docente: String
+    - fechaHora: LocalDateTime
+    - modalidad: Modalidad
+    - motivo: String
+    - observacion: String
+    - prioridad: Prioridad
+    - recordatorio: boolean
+    - enlace: String
+    - duracionMinutos: int
+    ~ Reserva(...)
+    + getEstudiante(): String
+    + getDocente(): String
+    + getFechaHora(): LocalDateTime
+    + getModalidad(): Modalidad
+    + getMotivo(): String
+    + getObservacion(): String
+    + getPrioridad(): Prioridad
+    + isRecordatorio(): boolean
+    + getEnlace(): String
+    + getDuracionMinutos(): int
+}
+class ReservaBuilder {
+    - estudiante: String
+    - docente: String
+    - fechaHora: LocalDateTime
+    - modalidad: Modalidad
+    - motivo: String
+    - observacion: String
+    - prioridad: Prioridad
+    - recordatorio: boolean
+    - enlace: String
+    - duracionMinutos: int
+    + estudiante(valor: String): ReservaBuilder
+    + docente(valor: String): ReservaBuilder
+    + fechaHora(valor: LocalDateTime): ReservaBuilder
+    + modalidad(valor: Modalidad): ReservaBuilder
+    + motivo(valor: String): ReservaBuilder
+    + observacion(valor: String): ReservaBuilder
+    + prioridad(valor: Prioridad): ReservaBuilder
+    + recordatorio(valor: boolean): ReservaBuilder
+    + enlace(valor: String): ReservaBuilder
+    + duracionMinutos(valor: int): ReservaBuilder
+    + build(): Reserva
+    - validar(): void
+}
+ReservaBuilder ..> Reserva : construye
+Reserva --> Modalidad
+Reserva --> Prioridad
+@enduml
